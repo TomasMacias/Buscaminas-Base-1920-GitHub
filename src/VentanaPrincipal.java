@@ -49,7 +49,7 @@ public class VentanaPrincipal {
 		ventana.setBounds(100, 100, 700, 500);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		juego = new ControlJuego();
-		juego.depurarTablero();
+		//juego.depurarTablero();
 	}
 	
 	//Inicializa todos los componentes del frame
