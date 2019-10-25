@@ -11,11 +11,12 @@ import java.awt.event.ActionListener;
  */
 public class ActionBoton implements ActionListener{
 
-	int i;
-	int j;
-
-	public ActionBoton() {
-		
+	int vertical, horizontal;
+	VentanaPrincipal ventana;
+	public ActionBoton(int vertical, int horizontal, VentanaPrincipal ventana ) {
+		this.vertical = vertical;
+		this.horizontal = horizontal;
+		this.ventana = ventana; 
 	}
 	
 	/**
@@ -24,6 +25,7 @@ public class ActionBoton implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//TODO
+		ventana.mostrarNumMinasAlrededor(vertical, horizontal);
 	}
 
 }

@@ -18,8 +18,6 @@ public class ControlJuego {
 	public ControlJuego() {
 		// Creamos el tablero:
 		tablero = new int[LADO_TABLERO][LADO_TABLERO];
-
-		
 	}
 
 	/**
@@ -31,22 +29,29 @@ public class ControlJuego {
 	 *        minas guardan en el entero cuántas minas hay alrededor de la celda
 	 */
 	public void inicializarPartida() {
-		int i, j;
+		int vertical, horizontal;
 		boolean minaOcupada = false;
 		puntuacion = 0;
 		// TODO: Repartir minas e inicializar puntaci�n. Si hubiese un tablero
 		// anterior, lo pongo todo a cero para inicializarlo.
-		for (int m = 0; m < MINAS_INICIALES; m++) {
+		for (vertical = 0; vertical < tablero.length; vertical++) {
+			for (horizontal = 0; horizontal < tablero.length; horizontal++) {
+				tablero[vertical][horizontal]=0;
+			}
+		}
+		
+		
+		for (int minasTotales = 0; minasTotales < MINAS_INICIALES; minasTotales++) {
 			do {
 				// Calculamos la fila
-				i = (int) (Math.random() * LADO_TABLERO);
+				vertical = (int) (Math.random() * LADO_TABLERO);
 				// Calculamos la columna
-				j = (int) (Math.random() * LADO_TABLERO);
+				horizontal = (int) (Math.random() * LADO_TABLERO);
 				// Si la posicion del tablero contiene mina
-				if (tablero[i][j] == -1) {
+				if (tablero[vertical][horizontal] == -1) {
 					minaOcupada = true;
 				} else {// Si no hay mina, se coloca en la posicion.
-					tablero[i][j] = -1;
+					tablero[vertical][horizontal] = -1;
 					minaOcupada = false;
 				}
 				// Si hay mina, se realiza de nuevo el random
@@ -55,10 +60,10 @@ public class ControlJuego {
 
 		// Al final del m�todo hay que guardar el n�mero de minas para las casillas
 		// que no son mina:
-		for (i = 0; i < tablero.length; i++) {
-			for (j = 0; j < tablero[i].length; j++) {
-				if (tablero[i][j] != MINA) {
-					tablero[i][j] = calculoMinasAdjuntas(i, j);
+		for (vertical = 0; vertical < tablero.length; vertical++) {
+			for (horizontal = 0; horizontal < tablero[vertical].length; horizontal++) {
+				if (tablero[vertical][horizontal] != MINA) {
+					tablero[vertical][horizontal] = calculoMinasAdjuntas(vertical, horizontal);
 				}
 			}
 		}
@@ -126,7 +131,7 @@ public class ControlJuego {
 	 *         minas.
 	 **/
 	public boolean esFinJuego() {
-		return puntuacion == 80;
+		return puntuacion == LADO_TABLERO*LADO_TABLERO-MINAS_INICIALES;
 	}
 
 	/**
