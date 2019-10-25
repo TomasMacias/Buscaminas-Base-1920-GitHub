@@ -9,34 +9,39 @@
  */
 public class ControlJuego {
 	private final static int MINA = -1;
-	final int MINAS_INICIALES = 20;
-	final int LADO_TABLERO = 10;
+	final int MINAS_INICIALES;
+	final int LADO_TABLERO_VERTICAL;
 
+	final int LADO_TABLERO_HORIZONTAL;
 	private int[][] tablero;
 	private int puntuacion;
 
-	public ControlJuego() {
+	public ControlJuego(int i, int j) {
 		// Creamos el tablero:
-		tablero = new int[LADO_TABLERO][LADO_TABLERO];
+		tablero = new int[i][j];
+		MINAS_INICIALES = ((i*j)*20)/100;
+		LADO_TABLERO_VERTICAL=i;
+		LADO_TABLERO_HORIZONTAL=j;
 	}
 
 	/**
 	 * Método para generar un nuevo tablero de partida:
-	 * 
+	 * i => Lado vertical
+	 * j => Lado horizontal.
 	 * @pre: La estructura tablero debe existir.
 	 * @post: Al final el tablero se habrá inicializado con tantas minas como
 	 *        marque la variable MINAS_INICIALES. El resto de posiciones que no son
 	 *        minas guardan en el entero cuántas minas hay alrededor de la celda
 	 */
 	public void inicializarPartida() {
-		int vertical, horizontal;
+		int i, j;
 		boolean minaOcupada = false;
 		puntuacion = 0;
 		// TODO: Repartir minas e inicializar puntaci�n. Si hubiese un tablero
 		// anterior, lo pongo todo a cero para inicializarlo.
-		for (vertical = 0; vertical < tablero.length; vertical++) {
-			for (horizontal = 0; horizontal < tablero.length; horizontal++) {
-				tablero[vertical][horizontal]=0;
+		for (i = 0; i < LADO_TABLERO_VERTICAL; i++) {
+			for (j = 0; j < LADO_TABLERO_HORIZONTAL; j++) {
+				tablero[i][j]=0;
 			}
 		}
 		
@@ -44,14 +49,14 @@ public class ControlJuego {
 		for (int minasTotales = 0; minasTotales < MINAS_INICIALES; minasTotales++) {
 			do {
 				// Calculamos la fila
-				vertical = (int) (Math.random() * LADO_TABLERO);
+				i = (int) (Math.random() * LADO_TABLERO_VERTICAL);
 				// Calculamos la columna
-				horizontal = (int) (Math.random() * LADO_TABLERO);
+				j = (int) (Math.random() * LADO_TABLERO_HORIZONTAL);
 				// Si la posicion del tablero contiene mina
-				if (tablero[vertical][horizontal] == -1) {
+				if (tablero[i][j] == -1) {
 					minaOcupada = true;
 				} else {// Si no hay mina, se coloca en la posicion.
-					tablero[vertical][horizontal] = -1;
+					tablero[i][j] = -1;
 					minaOcupada = false;
 				}
 				// Si hay mina, se realiza de nuevo el random
@@ -60,10 +65,10 @@ public class ControlJuego {
 
 		// Al final del m�todo hay que guardar el n�mero de minas para las casillas
 		// que no son mina:
-		for (vertical = 0; vertical < tablero.length; vertical++) {
-			for (horizontal = 0; horizontal < tablero[vertical].length; horizontal++) {
-				if (tablero[vertical][horizontal] != MINA) {
-					tablero[vertical][horizontal] = calculoMinasAdjuntas(vertical, horizontal);
+		for (i = 0; i < LADO_TABLERO_VERTICAL; i++) {
+			for (j = 0; j < LADO_TABLERO_HORIZONTAL; j++) {
+				if (tablero[i][j] != MINA) {
+					tablero[i][j] = calculoMinasAdjuntas(i, j);
 				}
 			}
 		}
@@ -84,15 +89,15 @@ public class ControlJuego {
 		int minaTotal = 0;
 		// v --> vertical
 		// h --> horizontal.
-		int vertical, horizontal;
+		int v, h;
 
-		for (vertical = i - 1; vertical <= i + 1; vertical++) {
-			for (horizontal = j - 1; horizontal <= j + 1; horizontal++) {
+		for (v = i - 1; v <= i + 1; v++) {
+			for (h = j - 1; h <= j + 1; h++) {
 				// Condicion que no pase de los limites de las esquinas y los margenes.
-				if (!(vertical < 0 || vertical > tablero.length - 1 || horizontal < 0
-						|| horizontal > tablero.length - 1)) {
+				if (!(v < 0 || v > LADO_TABLERO_VERTICAL - 1 || h < 0
+						|| h > LADO_TABLERO_HORIZONTAL - 1)) {
 
-					if (tablero[vertical][horizontal] == MINA) {
+					if (tablero[v][h] == MINA) {
 						minaTotal++;
 
 					} // Cierre if
@@ -131,7 +136,7 @@ public class ControlJuego {
 	 *         minas.
 	 **/
 	public boolean esFinJuego() {
-		return puntuacion == LADO_TABLERO*LADO_TABLERO-MINAS_INICIALES;
+		return puntuacion == LADO_TABLERO_VERTICAL*LADO_TABLERO_HORIZONTAL-MINAS_INICIALES;
 	}
 
 	/**
@@ -140,7 +145,7 @@ public class ControlJuego {
 	 */
 	public void depurarTablero() {
 		System.out.println("---------TABLERO--------------");
-		for (int i = 0; i < tablero.length; i++) {
+		for (int i = 0; i < LADO_TABLERO_VERTICAL; i++) {
 			for (int j = 0; j < tablero[i].length; j++) {
 				System.out.print(tablero[i][j] + "\t");
 			}

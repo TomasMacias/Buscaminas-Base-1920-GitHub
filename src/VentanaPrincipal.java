@@ -43,12 +43,21 @@ public class VentanaPrincipal {
 	// LA VENTANA GUARDA UN CONTROL DE JUEGO:
 	ControlJuego juego;
 
+	int vertical=0, horizontal=0;
+
 	// Constructor, marca el tama√±o y el cierre del frame
 	public VentanaPrincipal() {
-		ventana = new JFrame();
+		ventana = new JFrame("Buscaminas de Tom·s");
 		ventana.setBounds(100, 100, 700, 500);
+		while (vertical <4) {
+			vertical = Integer.parseInt(JOptionPane.showInputDialog("øCuantas filas deseas?"));
+		}
+		while (horizontal < 4) {
+			horizontal = Integer.parseInt(JOptionPane.showInputDialog("øCuantas columnas deseas?"));
+		}
+
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		juego = new ControlJuego();
+		juego = new ControlJuego(vertical, horizontal);
 	}
 
 	// Inicializa todos los componentes del frame
@@ -64,7 +73,7 @@ public class VentanaPrincipal {
 		panelPuntuacion = new JPanel();
 		panelPuntuacion.setLayout(new GridLayout(1, 1));
 		panelJuego = new JPanel();
-		panelJuego.setLayout(new GridLayout(10, 10));
+		panelJuego.setLayout(new GridLayout(vertical, horizontal));
 
 		botonEmpezar = new JButton("Go!");
 		pantallaPuntuacion = new JTextField("0");
@@ -107,15 +116,15 @@ public class VentanaPrincipal {
 		settings.gridx = 0;
 		settings.gridy = 1;
 		settings.weightx = 1;
-		settings.weighty = 10;
+		settings.weighty = horizontal;
 		settings.gridwidth = 3;
 		settings.fill = GridBagConstraints.BOTH;
 		ventana.add(panelJuego, settings);
 
 		// Paneles
-		panelesJuego = new JPanel[10][10];
-		for (int i = 0; i < panelesJuego.length; i++) {
-			for (int j = 0; j < panelesJuego[i].length; j++) {
+		panelesJuego = new JPanel[vertical][horizontal];
+		for (int i = 0; i < vertical; i++) {
+			for (int j = 0; j < horizontal; j++) {
 				panelesJuego[i][j] = new JPanel();
 				panelesJuego[i][j].setLayout(new GridLayout(1, 1));
 				panelJuego.add(panelesJuego[i][j]);
@@ -123,15 +132,15 @@ public class VentanaPrincipal {
 		}
 
 		// Botones
-		botonesJuego = new JButton[10][10];
-		for (int i = 0; i < botonesJuego.length; i++) {
-			for (int j = 0; j < botonesJuego[i].length; j++) {
-				botonesJuego[i][j] = new JButton("-");
+		botonesJuego = new JButton[vertical][horizontal];
+		for (int i = 0; i < vertical; i++) {
+			for (int j = 0; j < horizontal; j++) {
+				botonesJuego[i][j] = new JButton("");
 				panelesJuego[i][j].add(botonesJuego[i][j]);
 
 			}
 		}
-		activarBotones(false);
+		habilitarBotones(false);
 
 		// Bot√≥nEmpezar:
 		panelEmpezar.add(botonEmpezar);
@@ -149,18 +158,17 @@ public class VentanaPrincipal {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Inicializamos una nueva partida
-				activarBotones(true);
+				habilitarBotones(true);
 				iniciarPartida();
 				refrescarPantalla();
 			}
 		});
 
-		for (int i = 0; i < botonesJuego.length; i++) {
-			for (int j = 0; j < botonesJuego.length; j++) {
-				botonesJuego[i][j].addActionListener(new ActionBoton(i, j, this));
+		for (int i = 0; i < vertical; i++) {
+			for (int j = 0; j < horizontal; j++) {
+				botonesJuego[i][j].addMouseListener(new ActionBoton(i, j, this));
 			}
 		}
-
 	}
 
 	/**
@@ -179,7 +187,6 @@ public class VentanaPrincipal {
 		int numero = juego.getMinasAlrededor(i, j);
 		if (juego.abrirCasilla(i, j)) {
 			JLabel nMina = new JLabel();
-
 			panelesJuego[i][j].removeAll();
 			// Opciones para el jlabel (Texto, color y alineacion).
 			nMina.setText(String.valueOf(juego.getMinasAlrededor(i, j)));
@@ -187,14 +194,14 @@ public class VentanaPrincipal {
 			nMina.setHorizontalAlignment(JLabel.CENTER);
 
 			panelesJuego[i][j].add(nMina);
-			nMina.setHorizontalTextPosition(JLabel.CENTER);
 			actualizarPuntuacion();
+			refrescarPantalla();
 			mostrarFinJuego(false);
 		} else {
 			mostrarFinJuego(true);
-		}
 
-		refrescarPantalla();
+		}
+		
 	}
 
 	/**
@@ -209,25 +216,27 @@ public class VentanaPrincipal {
 	public void mostrarFinJuego(boolean porExplosion) {
 		// TODO
 		int op = -1;
-		//Si hemos perdido.
+		// Si hemos perdido.
 		if (porExplosion) {
-			activarBotones(false);
+			mostrarInformacionTablero();
+			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(null, "øQuieres volver a jugar?", "HAS PERDIDO",
-					JOptionPane.YES_NO_OPTION, 0,new ImageIcon("perder.png"));
+					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("perder.png"));
 		}
-		//Si hemos ganado.
-		if (!porExplosion && juego.getPuntuacion() == 80) {
-			activarBotones(false);
+		// Si hemos ganado.
+		if (!porExplosion && juego.esFinJuego()) {
+			habilitarBotones(false);			
 			op = JOptionPane.showConfirmDialog(null, "øQuieres volver a jugar?", "HAS GANADO.",
 					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("ganar.png"));
 		}
-		//Si es si iniciamos de nuevo el juego.
+		// Si es si iniciamos de nuevo el juego.
 		if (op == 0) {
+			
 			iniciarPartida();
 			refrescarPantalla();
 		}
-		//Si es no cerramos el juego.
-		if(op==1) {
+		// Si es no cerramos el juego.
+		if (op == 1) {
 			ventana.dispose();
 		}
 
@@ -271,11 +280,12 @@ public class VentanaPrincipal {
 	/**
 	 * Metodo para activar desactivar los botones.
 	 * 
-	 * @param activo
+	 * @param activo 
+	 * si activo es true de habilitan, si es false se deshabilitan.
 	 */
-	public void activarBotones(boolean activo) {
-		for (int i = 0; i < botonesJuego.length; i++) {
-			for (int j = 0; j < botonesJuego.length; j++) {
+	public void habilitarBotones(boolean activo) {
+		for (int i = 0; i < vertical; i++) {
+			for (int j = 0; j < horizontal; j++) {
 				botonesJuego[i][j].setEnabled(activo);
 			}
 		}
@@ -285,15 +295,72 @@ public class VentanaPrincipal {
 	 * Metodo para iniciar la partida de buscaminas.
 	 */
 	public void iniciarPartida() {
-		pantallaPuntuacion.setText("0");		
-		activarBotones(true);
+		pantallaPuntuacion.setText("0");
+		habilitarBotones(true);
 		juego.inicializarPartida();
-		for (int i = 0; i < panelesJuego.length; i++) {
-			for (int j = 0; j < panelesJuego.length; j++) {
+		for (int i = 0; i < vertical; i++) {
+			for (int j = 0; j < horizontal; j++) {
 				panelesJuego[i][j].removeAll();
 				panelesJuego[i][j].add(botonesJuego[i][j]);
 			}
 		}
-		
+
+	}
+
+	/**
+	 * Metodo para cuando perdamos mostramos todas las casillas y su informaciÛn.
+	 */
+	public void mostrarInformacionTablero() {
+		for (int i = 0; i < vertical; i++) {
+			for (int j = 0; j < horizontal; j++) {
+				if (!juego.abrirCasilla(i, j)) {
+					// Mostramos una imagen en el panel.
+					JLabel imagenMina = new JLabel();
+					ImageIcon mina = new ImageIcon("mina.png");
+					imagenMina.setIcon(mina);
+					imagenMina.setHorizontalAlignment(JLabel.CENTER);
+					panelesJuego[i][j].removeAll();
+					panelesJuego[i][j].add(imagenMina);
+				} else {
+					JLabel nMina = new JLabel();
+					panelesJuego[i][j].removeAll();
+					// Opciones para el jlabel (Texto, color y alineacion).
+					nMina.setText(String.valueOf(juego.getMinasAlrededor(i, j)));
+					nMina.setForeground(correspondenciaColores[juego.getMinasAlrededor(i, j)]);
+					nMina.setHorizontalAlignment(JLabel.CENTER);
+
+					panelesJuego[i][j].add(nMina);
+				}
+			}
+		}
+		refrescarPantalla();
+	}
+	/**
+	 * Metodo para poner una bandera en el boton.
+	 */
+	public void ponerBandera(int i, int j) {
+		JLabel imagenBandera = new JLabel();
+		ImageIcon bandera = new ImageIcon("bandera.png");
+		imagenBandera.setIcon(bandera);
+		botonesJuego[i][j].setIcon(bandera);		
+		panelesJuego[i][j].add(botonesJuego[i][j]);
+		refrescarPantalla();
+	}
+	/**
+	 * Metodo para quitar bandera.
+	 */
+	public void quitarBandera(int i, int j) {
+		botonesJuego[i][j].setIcon(null);
+		panelesJuego[i][j].add(botonesJuego[i][j]);
+		refrescarPantalla();
+	}
+	/**
+	 * Metodo para comprobar si hay bandera.
+	 * @param i
+	 * @param j
+	 * @return true si no hay bandera, false si hay bandera.
+	 */
+	public boolean comprobarBandera(int i, int j) {
+		return botonesJuego[i][j].getIcon()==null;
 	}
 }
