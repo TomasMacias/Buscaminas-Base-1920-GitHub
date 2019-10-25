@@ -33,7 +33,7 @@ public class VentanaPrincipal {
 	JButton [][] botonesJuego;
 	
 	//Correspondencia de colores para las minas:
-	Color correspondenciaColores [] = {Color.BLACK, Color.CYAN, Color.GREEN, Color.ORANGE, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED};
+	Color correspondenciaColores [] = {Color.BLACK, Color.CYAN, Color.GREEN, Color.ORANGE, Color.RED};
 	
 	JButton botonEmpezar;
 	JTextField pantallaPuntuacion;
@@ -42,6 +42,8 @@ public class VentanaPrincipal {
 	//LA VENTANA GUARDA UN CONTROL DE JUEGO:
 	ControlJuego juego;
 	
+	int i;
+	int j;
 	
 	//Constructor, marca el tamaño y el cierre del frame
 	public VentanaPrincipal() {
@@ -144,7 +146,18 @@ public class VentanaPrincipal {
 	 * Método que inicializa todos los lísteners que necesita inicialmente el programa
 	 */
 	public void inicializarListeners(){
-		//TODO
+		
+		botonEmpezar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Inicializamos una nueva partida
+				juego.inicializarPartida();
+				
+			}
+		});
+		
+		
 	}
 	
 	
@@ -162,6 +175,9 @@ public class VentanaPrincipal {
 	 */
 	public void mostrarNumMinasAlrededor(int i , int j) {
 		//TODO
+		
+		//Llamamos al metodo. getMinasAlrededor
+		
 	}
 	
 	
@@ -178,7 +194,7 @@ public class VentanaPrincipal {
 	 * Método que muestra la puntuación por pantalla.
 	 */
 	public void actualizarPuntuacion() {
-		//TODO
+		pantallaPuntuacion.setText(String.valueOf(juego.getPuntuacion()));
 	}
 	
 	/**

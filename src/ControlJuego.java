@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Random;
-
 /**
  * Clase gestora del tablero de juego. Guarda una matriz de enteros representado
  * el tablero. Si hay una mina en una posición guarda el número -1 Si no hay
@@ -22,8 +19,7 @@ public class ControlJuego {
 		// Creamos el tablero:
 		tablero = new int[LADO_TABLERO][LADO_TABLERO];
 
-		// Inicializamos una nueva partida
-		inicializarPartida();
+		
 	}
 
 	/**
@@ -37,6 +33,7 @@ public class ControlJuego {
 	public void inicializarPartida() {
 		int i, j;
 		boolean minaOcupada = false;
+		puntuacion = 0;
 		// TODO: Repartir minas e inicializar puntaci�n. Si hubiese un tablero
 		// anterior, lo pongo todo a cero para inicializarlo.
 		for (int m = 0; m < MINAS_INICIALES; m++) {
@@ -82,71 +79,22 @@ public class ControlJuego {
 		int minaTotal = 0;
 		// v --> vertical
 		// h --> horizontal.
-		int v, h;
+		int vertical, horizontal;
 
-		// Comprobamos la minas de alrededor de la esquina de arriba a la izquierda.
-		// Comprobamos abajo-abajo(derecha)-derecha.
-		if (i == 0 && j == 0) {
-			for (v = i; v <= i + 1; v++) {
-				for (h = j; h <= j + 1; h++) {
-					if (tablero[v][h] == MINA) {
-						minaTotal++;
-					}
-				}
-			}
-		}
-		
-		// Comprobamos las minas de alrededor de la esquina de abajo a la izquierda.
-		// Comprobamos arriba-arriba(derecha)-derecha.
-		if (i == tablero.length - 1 && j == 0) {
-			for (v = i - 1; v <= i; v++) {
-				for (h = j; h <= j + 1; h++) {
-					if (tablero[v][h] == MINA) {
-						minaTotal++;
-					}
-				}
-			}
-		}
-		
-		// Comprobamos las minas de alrededor de la esquina de arriba a la derecha.
-		// Comprobamos arriba-arriba(derecha)-derecha.
-		if (i == 0 && j == tablero.length - 1) {
-			for (v = i; v <= i + 1; v++) {
-				for (h = j - 1; h <= j; h++) {
-					if (tablero[v][h] == MINA) {
-						minaTotal++;
-					}
-				}
-			}
-		}
+		for (vertical = i - 1; vertical <= i + 1; vertical++) {
+			for (horizontal = j - 1; horizontal <= j + 1; horizontal++) {
+				// Condicion que no pase de los limites de las esquinas y los margenes.
+				if (!(vertical < 0 || vertical > tablero.length - 1 || horizontal < 0
+						|| horizontal > tablero.length - 1)) {
 
-		// Comprobamos las minas de alrededor de la esquina de abajo a la derecha.
-		// Comprobamos arriba-arriba(derecha)-derecha.
-		if (i == tablero.length - 1 && j == tablero.length - 1) {
-			for (v = i - 1; v <= i; v++) {
-				for (h = j - 1; h <= j; h++) {
-					if (tablero[v][h] == MINA) {
+					if (tablero[vertical][horizontal] == MINA) {
 						minaTotal++;
-					}
-				}
-			}
-		}
 
-		// Comprobamos las minas de alrededor de las casillas fuera de los margenes.
-		// Mientras "i" y "j" sea distinto a las esquinas del tablero.
-		if ((i != 0 && i != tablero.length - 1) && (j != 0 && j != tablero.length - 1)) {
-			// Inicializamos "v" y "h" al valor de "i" y "j" menos 1. 
-			//Hasta el valor de "i"  y "j" +1.
-			// Para comprobar.
-			// arriba(derecha/izquierda)-derecha/izquierda-arriba/abajo-abajo(derecha/izquierda).
-			for (v = i - 1; v <= i + 1; v++) {
-				for (h = j - 1; h <= j + 1; h++) {
-					if (tablero[v][h] == MINA) {
-						minaTotal++;
-					}
-				}
-			}
-		}
+					} // Cierre if
+					
+				} // Cierre if condicion
+			} // Cierre for horizontal.
+		} // Cierre for vertical.
 
 		return minaTotal;
 	}
@@ -161,7 +109,13 @@ public class ControlJuego {
 	 * @return : Verdadero si no ha explotado una mina. Falso en caso contrario.
 	 */
 	public boolean abrirCasilla(int i, int j) {
-		return false;
+		if(tablero[i][j]!=MINA) {
+			puntuacion++;
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 	/**
@@ -172,7 +126,7 @@ public class ControlJuego {
 	 *         minas.
 	 **/
 	public boolean esFinJuego() {
-		return false;
+		return puntuacion == 80;
 	}
 
 	/**
@@ -199,8 +153,8 @@ public class ControlJuego {
 	 * @param j : posición horizontal de la cela.
 	 * @return Un entero que representa el número de minas alrededor de la celda
 	 */
-	public int getMinasAlrededor(int i, int j) {
-		return 0;
+	public int getMinasAlrededor(int i, int j) {		
+		return tablero[i][j];
 	}
 
 	/**
@@ -209,7 +163,7 @@ public class ControlJuego {
 	 * @return Un entero con la puntuación actual
 	 */
 	public int getPuntuacion() {
-		return 0;
+		return puntuacion;
 	}
 
 }

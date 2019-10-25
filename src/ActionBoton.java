@@ -11,10 +11,11 @@ import java.awt.event.ActionListener;
  */
 public class ActionBoton implements ActionListener{
 
-	
+	int i;
+	int j;
 
 	public ActionBoton() {
-		//TODO
+		
 	}
 	
 	/**
