@@ -72,7 +72,6 @@ public class ControlJuego {
 				}
 			}
 		}
-		depurarTablero();
 	}
 
 	/**
