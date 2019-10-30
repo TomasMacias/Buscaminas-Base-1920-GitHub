@@ -1,6 +1,7 @@
 
 import java.applet.*;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -16,7 +17,7 @@ public class SonidoBoton extends Applet {
 	public SonidoBoton(int i) {
 
 		if (i == 0) {
-			InputStream sound = getClass().getResourceAsStream("/material/click.wav");
+			URL sound = getClass().getResource("/material/click.wav");
 			
 			try {
 				Clip sonido = AudioSystem.getClip();
@@ -26,7 +27,7 @@ public class SonidoBoton extends Applet {
 				// TODO: handle exception
 			}
 		} else {
-			InputStream sound = getClass().getResourceAsStream("/material/explosion.wav");
+			URL sound = getClass().getResource("/material/explosion.wav");
 			try {
 				Clip sonido = AudioSystem.getClip();
 				sonido.open(AudioSystem.getAudioInputStream(sound));
