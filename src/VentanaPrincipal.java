@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
  * 
  * @author Tomas Macias Castela.
  * @since 22-10-2019
- * @version 1.9
+ * @version 2.0
  * @see ControlJuego
  * 
  *
