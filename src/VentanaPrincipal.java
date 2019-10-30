@@ -16,7 +16,16 @@ import javax.swing.SwingConstants;
 
 /**
  * 
+ * Informacion que recibe el usuario al jugar. {@link #inicializar()}
+ * {@code ventana.setVisible(true);
+		inicializarComponentes();
+		inicializarListeners();}
+ * 
  * @author Tomas Macias Castela.
+ * @since 22-10-2019
+ * @version 1.8
+ * @see ControlJuego
+ * 
  *
  */
 public class VentanaPrincipal {
@@ -49,7 +58,8 @@ public class VentanaPrincipal {
 	// Constructor, marca el tama√±o y el cierre del frame
 	public VentanaPrincipal() {
 		ventana = new JFrame("Buscaminas de Tom·s");
-		ventana.setBounds(100, 100, 700, 500);
+		ventana.setBounds(0, 0, 700, 500);
+		ventana.setLocationRelativeTo(null);
 		error = false;
 		while (vertical < 4 || error) {
 			error = false;
@@ -159,7 +169,7 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * M√©todo que inicializa todos los l√≠steners que necesita inicialmente el
+	 * MÈtodo que inicializa todos los lÌsteners que necesita inicialmente el
 	 * programa
 	 */
 	public void inicializarListeners() {
@@ -182,15 +192,14 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * Pinta en la pantalla el n√∫mero de minas que hay alrededor de la celda Saca
-	 * el bot√≥n que haya en la celda determinada y a√±ade un JLabel centrado y no
-	 * editable con el n√∫mero de minas alrededor. Se pinta el color del texto
-	 * seg√∫n la siguiente correspondecia (consultar la variable
-	 * correspondeciaColor): - 0 : negro - 1 : cyan - 2 : verde - 3 : naranja - 4 √≥
-	 * m√°s : rojo
+	 * Pinta en la pantalla el n˙mero de minas que hay alrededor de la celda. Saca
+	 * el botÛn que haya en la celda determinada y aÒade un JLabel centrado y no
+	 * editable con el n˙mero de minas alrededor. Se pinta el color del texto seg˙n
+	 * la siguiente correspondecia (consultar la variable correspondeciaColor): - 0
+	 * : negro - 1 : cyan - 2 : verde - 3 : naranja - 4 o m·s : rojo
 	 * 
-	 * @param i: posici√≥n vertical de la celda.
-	 * @param j: posici√≥n horizontal de la celda.
+	 * @param i: posiciÛn vertical de la celda.
+	 * @param j: posiciÛn horizontal de la celda.
 	 */
 	public void mostrarNumMinasAlrededor(int i, int j) {
 		// TODO
@@ -233,13 +242,13 @@ public class VentanaPrincipal {
 			mostrarInformacionTablero();
 			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(ventana, "øQuieres volver a jugar?", "HAS PERDIDO",
-					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("perder.png"));
+					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("imagenes//perder.png"));
 		}
 		// Si hemos ganado.
 		if (!porExplosion && juego.esFinJuego()) {
 			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(ventana, "øQuieres volver a jugar?", "HAS GANADO.",
-					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("ganar.png"));
+					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("imagenes//ganar.png"));
 		}
 		// Si es si iniciamos de nuevo el juego.
 		if (op == 0) {
@@ -255,14 +264,14 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * M√©todo que muestra la puntuaci√≥n por pantalla.
+	 * M√©todo que muestra la puntuaciÛn por pantalla.
 	 */
 	public void actualizarPuntuacion() {
 		pantallaPuntuacion.setText(String.valueOf(juego.getPuntuacion()));
 	}
 
 	/**
-	 * M√©todo para refrescar la pantalla
+	 * MÈtodo para refrescar la pantalla
 	 */
 	public void refrescarPantalla() {
 		ventana.revalidate();
@@ -270,7 +279,7 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * M√©todo que devuelve el control del juego de una ventana
+	 * MÈtodo que devuelve el control del juego de una ventana
 	 * 
 	 * @return un ControlJuego con el control del juego de la ventana
 	 */
@@ -279,7 +288,7 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * M√©todo para inicializar el programa
+	 * MÈtodo para inicializar el programa
 	 */
 	public void inicializar() {
 		// IMPORTANTE, PRIMERO HACEMOS LA VENTANA VISIBLE Y LUEGO INICIALIZAMOS LOS
@@ -290,7 +299,7 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * Metodo para activar desactivar los botones.
+	 * MÈtodo para activar desactivar los botones.
 	 * 
 	 * @param activo si activo es true de habilitan, si es false se deshabilitan.
 	 */
@@ -303,7 +312,7 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * Metodo para iniciar la partida de buscaminas.
+	 * MÈtodo para iniciar la partida de buscaminas.
 	 */
 	public void iniciarPartida() {
 		pantallaPuntuacion.setText("0");
@@ -312,6 +321,7 @@ public class VentanaPrincipal {
 		for (int i = 0; i < vertical; i++) {
 			for (int j = 0; j < horizontal; j++) {
 				panelesJuego[i][j].removeAll();
+				botonesJuego[i][j].setIcon(null);
 				panelesJuego[i][j].add(botonesJuego[i][j]);
 			}
 		}
@@ -319,7 +329,7 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * Metodo para cuando perdamos mostramos todas las casillas y su informaciÛn.
+	 * MÈtodo para cuando perdamos mostramos todas las casillas y su informaciÛn.
 	 */
 	public void mostrarInformacionTablero() {
 		for (int i = 0; i < vertical; i++) {
@@ -327,7 +337,7 @@ public class VentanaPrincipal {
 				if (!juego.abrirCasilla(i, j)) {
 					// Mostramos una imagen en el panel.
 					JLabel imagenMina = new JLabel();
-					ImageIcon mina = new ImageIcon("mina.png");
+					ImageIcon mina = new ImageIcon("imagenes//mina.png");
 					imagenMina.setIcon(mina);
 					imagenMina.setHorizontalAlignment(JLabel.CENTER);
 					panelesJuego[i][j].removeAll();
@@ -348,11 +358,14 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * Metodo para poner una bandera en el boton.
+	 * Metodo para poner la bandera en una casilla.
+	 * 
+	 * @param i Posicion vertical del tablero.
+	 * @param j Posicion horizontal del tablero.
 	 */
 	public void ponerBandera(int i, int j) {
 		JLabel imagenBandera = new JLabel();
-		ImageIcon bandera = new ImageIcon("bandera.png");
+		ImageIcon bandera = new ImageIcon("imagenes//bandera.png");
 		imagenBandera.setIcon(bandera);
 		botonesJuego[i][j].setIcon(bandera);
 		panelesJuego[i][j].add(botonesJuego[i][j]);
@@ -360,7 +373,10 @@ public class VentanaPrincipal {
 	}
 
 	/**
-	 * Metodo para quitar bandera.
+	 * MÈtodo para quitar la bandera de una casilla.
+	 * 
+	 * @param i Posicion vertical del tablero.
+	 * @param j Posicion horizontal del tablero.
 	 */
 	public void quitarBandera(int i, int j) {
 		botonesJuego[i][j].setIcon(null);
@@ -371,8 +387,8 @@ public class VentanaPrincipal {
 	/**
 	 * Metodo para comprobar si hay bandera.
 	 * 
-	 * @param i
-	 * @param j
+	 * @param i Posicion vertical del tablero.
+	 * @param j Posicion horizontal del tablero.
 	 * @return true si no hay bandera, false si hay bandera.
 	 */
 	public boolean comprobarBandera(int i, int j) {
