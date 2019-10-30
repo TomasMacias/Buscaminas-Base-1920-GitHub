@@ -1,6 +1,9 @@
 
 import java.applet.*;
-import java.io.File;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class SonidoBoton extends Applet {
 
@@ -13,18 +16,21 @@ public class SonidoBoton extends Applet {
 	public SonidoBoton(int i) {
 
 		if (i == 0) {
-			File sound = new File("sonido//click.wav");
+			InputStream sound = getClass().getResourceAsStream("/material/click.wav");
+			
 			try {
-				AudioClip sonido = Applet.newAudioClip(sound.toURL());
-				sonido.play();
+				Clip sonido = AudioSystem.getClip();
+				sonido.open(AudioSystem.getAudioInputStream(sound));
+				sonido.start();
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		} else {
-			File sound = new File("sonido//explosion.wav");
+			InputStream sound = getClass().getResourceAsStream("/material/explosion.wav");
 			try {
-				AudioClip sonido = Applet.newAudioClip(sound.toURL());
-				sonido.play();
+				Clip sonido = AudioSystem.getClip();
+				sonido.open(AudioSystem.getAudioInputStream(sound));
+				sonido.start();
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

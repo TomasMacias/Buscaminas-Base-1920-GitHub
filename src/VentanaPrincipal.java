@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
  * 
  * @author Tomas Macias Castela.
  * @since 22-10-2019
- * @version 1.8
+ * @version 1.9
  * @see ControlJuego
  * 
  *
@@ -242,13 +242,13 @@ public class VentanaPrincipal {
 			mostrarInformacionTablero();
 			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(ventana, "¿Quieres volver a jugar?", "HAS PERDIDO",
-					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("imagenes//perder.png"));
+					JOptionPane.YES_NO_OPTION, 0, new ImageIcon(getClass().getResource("/material/perder.png")));
 		}
 		// Si hemos ganado.
 		if (!porExplosion && juego.esFinJuego()) {
 			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(ventana, "¿Quieres volver a jugar?", "HAS GANADO.",
-					JOptionPane.YES_NO_OPTION, 0, new ImageIcon("imagenes//ganar.png"));
+					JOptionPane.YES_NO_OPTION, 0, new ImageIcon(getClass().getResource("/material/ganar.png")));
 		}
 		// Si es si iniciamos de nuevo el juego.
 		if (op == 0) {
@@ -337,7 +337,7 @@ public class VentanaPrincipal {
 				if (!juego.abrirCasilla(i, j)) {
 					// Mostramos una imagen en el panel.
 					JLabel imagenMina = new JLabel();
-					ImageIcon mina = new ImageIcon("imagenes//mina.png");
+					ImageIcon mina = new ImageIcon(getClass().getResource("/material/mina.png"));
 					imagenMina.setIcon(mina);
 					imagenMina.setHorizontalAlignment(JLabel.CENTER);
 					panelesJuego[i][j].removeAll();
@@ -365,7 +365,7 @@ public class VentanaPrincipal {
 	 */
 	public void ponerBandera(int i, int j) {
 		JLabel imagenBandera = new JLabel();
-		ImageIcon bandera = new ImageIcon("imagenes//bandera.png");
+		ImageIcon bandera = new ImageIcon(getClass().getResource("/material/bandera.png"));
 		imagenBandera.setIcon(bandera);
 		botonesJuego[i][j].setIcon(bandera);
 		panelesJuego[i][j].add(botonesJuego[i][j]);
