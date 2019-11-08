@@ -22,8 +22,8 @@ import javax.swing.SwingConstants;
 		inicializarListeners();}
  * 
  * @author Tomas Macias Castela.
- * @since 22-10-2019
- * @version 2.0
+ * @since jdk 1.8.0_111
+ * @version 2.1
  * @see ControlJuego
  * 
  *
@@ -54,6 +54,8 @@ public class VentanaPrincipal {
 
 	int vertical = 0, horizontal = 0;
 	boolean error;
+
+	Cronometro crono = new Cronometro();
 
 	// Constructor, marca el tama√±o y el cierre del frame
 	public VentanaPrincipal() {
@@ -89,7 +91,8 @@ public class VentanaPrincipal {
 		ventana.setLayout(new GridBagLayout());
 
 		// Inicializamos componentes
-		panelImagen = new JPanel();
+		// panelImagen = new JPanel();
+		// panelImagen.add(crono);
 		panelEmpezar = new JPanel();
 		panelEmpezar.setLayout(new GridLayout(1, 1));
 		panelPuntuacion = new JPanel();
@@ -103,7 +106,7 @@ public class VentanaPrincipal {
 		pantallaPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
 
 		// Bordes y colores:
-		panelImagen.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		crono.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 		panelEmpezar.setBorder(BorderFactory.createTitledBorder("Empezar"));
 		panelPuntuacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 		panelJuego.setBorder(BorderFactory.createTitledBorder("Juego"));
@@ -114,9 +117,8 @@ public class VentanaPrincipal {
 		settings.gridx = 0;
 		settings.gridy = 0;
 		settings.weightx = 1;
-		settings.ipady = 40;
 		settings.fill = GridBagConstraints.BOTH;
-		ventana.add(panelImagen, settings);
+		ventana.add(crono, settings);
 		// VERDE
 		settings = new GridBagConstraints();
 		settings.gridx = 1;
@@ -157,7 +159,6 @@ public class VentanaPrincipal {
 			for (int j = 0; j < horizontal; j++) {
 				botonesJuego[i][j] = new JButton("");
 				panelesJuego[i][j].add(botonesJuego[i][j]);
-
 			}
 		}
 		habilitarBotones(false);
@@ -178,6 +179,7 @@ public class VentanaPrincipal {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Inicializamos una nueva partida
+				crono.comenzar();
 				habilitarBotones(true);
 				iniciarPartida();
 				refrescarPantalla();
@@ -220,7 +222,6 @@ public class VentanaPrincipal {
 		} else {
 			SonidoBoton sonido = new SonidoBoton(1);
 			mostrarFinJuego(true);
-
 		}
 
 	}
@@ -239,6 +240,7 @@ public class VentanaPrincipal {
 		int op = -2;
 		// Si hemos perdido.
 		if (porExplosion) {
+			crono.parar();
 			mostrarInformacionTablero();
 			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(ventana, "øQuieres volver a jugar?", "HAS PERDIDO",
@@ -246,14 +248,15 @@ public class VentanaPrincipal {
 		}
 		// Si hemos ganado.
 		if (!porExplosion && juego.esFinJuego()) {
+			crono.parar();
 			habilitarBotones(false);
 			op = JOptionPane.showConfirmDialog(ventana, "øQuieres volver a jugar?", "HAS GANADO.",
 					JOptionPane.YES_NO_OPTION, 0, new ImageIcon(getClass().getResource("/material/ganar.png")));
 		}
 		// Si es si iniciamos de nuevo el juego.
 		if (op == 0) {
-
 			iniciarPartida();
+			crono.comenzar();
 			refrescarPantalla();
 		}
 		// Si es no cerramos el juego.

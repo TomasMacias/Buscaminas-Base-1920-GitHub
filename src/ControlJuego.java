@@ -76,8 +76,8 @@ public class ControlJuego {
 	/**
 	 * Cálculo de las minas adjuntas: Para calcular el número de minas tenemos que
 	 * tener en cuenta que no nos salimos nunca del tablero. Por lo tanto, como
-	 * mucho la i y la j valdrán LADO_TABLERO-1. Por lo tanto, como poco la i y la
-	 * j valdrán 0.
+	 * mucho la i y la j valdrán LADO_TABLERO-1. Por lo tanto, como poco la i y la j
+	 * valdrán 0.
 	 * 
 	 * @param i: posición vertical de la casilla a rellenar
 	 * @param j: posición horizontal de la casilla a rellenar

@@ -1,6 +1,8 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.SwingUtilities;
+
 /**
  * Clase que implementa el listener de los botones del Buscaminas. De alguna
  * manera tendrá que poder acceder a la ventana principal. Se puede lograr
@@ -26,25 +28,6 @@ public class ActionBoton implements MouseListener {
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		// Click con el boton izquierdo.
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			// Si no tenemos bandera, desvelamos la casilla.
-			if (ventana.comprobarBandera(i, j)) {
-				ventana.mostrarNumMinasAlrededor(i, j);
-			}
-		}
-		// Click con el boton derecho.
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			// Si no tenemos bandera.
-			if (ventana.comprobarBandera(i, j)) {
-				// Ponemos la bandera.
-				ventana.ponerBandera(i, j);
-			} else {
-				// Si tenemos bandera, se la quitamos.
-				ventana.quitarBandera(i, j);
-			}
-		}
 
 	}
 
@@ -62,7 +45,22 @@ public class ActionBoton implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if (SwingUtilities.isLeftMouseButton(e)) {
+			// Si no tenemos bandera, desvelamos la casilla.
+			if (ventana.comprobarBandera(i, j)) {
+				ventana.mostrarNumMinasAlrededor(i, j);
+			}
+		}
+
+		if (SwingUtilities.isRightMouseButton(e)) {
+			if (ventana.comprobarBandera(i, j)) {
+				// Ponemos la bandera.
+				ventana.ponerBandera(i, j);
+			} else {
+				// Si tenemos bandera, se la quitamos.
+				ventana.quitarBandera(i, j);
+			}
+		}
 
 	}
 
